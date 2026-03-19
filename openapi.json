@@ -1,0 +1,1121 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Gcondo Slim REST API",
+    "description": "Documentacao OpenAPI gerada a partir das rotas e servicos do projeto.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Ambiente local"
+    }
+  ],
+  "tags": [
+    { "name": "Health" },
+    { "name": "Condominiums" },
+    { "name": "Units" },
+    { "name": "People" },
+    { "name": "Suppliers" },
+    { "name": "Budgets" },
+    { "name": "AuditLogs" }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Health"],
+        "summary": "Mensagem de boas-vindas",
+        "operationId": "getIndex",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statusCode": { "type": "integer", "example": 200 },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string", "example": "Welcome to the Gcondo Slim REST API" }
+                      },
+                      "required": ["message"]
+                    }
+                  },
+                  "required": ["statusCode", "data"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/condominiums": {
+      "get": {
+        "tags": ["Condominiums"],
+        "summary": "Lista condominios",
+        "operationId": "listCondominiums",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListCondominiumsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Condominiums"],
+        "summary": "Cria condominio",
+        "operationId": "createCondominium",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CondominiumInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CondominiumResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/ValidationError" },
+          "409": { "$ref": "#/components/responses/ConflictError" }
+        }
+      }
+    },
+    "/condominiums/{id}": {
+      "parameters": [
+        { "$ref": "#/components/parameters/IdPath" }
+      ],
+      "get": {
+        "tags": ["Condominiums"],
+        "summary": "Busca condominio por ID",
+        "operationId": "findCondominium",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CondominiumResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" }
+        }
+      },
+      "put": {
+        "tags": ["Condominiums"],
+        "summary": "Atualiza condominio",
+        "operationId": "updateCondominium",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CondominiumInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CondominiumResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" },
+          "422": { "$ref": "#/components/responses/ValidationError" }
+        }
+      },
+      "delete": {
+        "tags": ["Condominiums"],
+        "summary": "Remove condominio",
+        "operationId": "deleteCondominium",
+        "responses": {
+          "200": {
+            "description": "Removido",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/StatusOnlyResponse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequestError" },
+          "404": { "$ref": "#/components/responses/NotFoundError" }
+        }
+      }
+    },
+    "/units": {
+      "get": {
+        "tags": ["Units"],
+        "summary": "Lista unidades",
+        "operationId": "listUnits",
+        "parameters": [
+          {
+            "name": "condominium_id",
+            "in": "query",
+            "required": false,
+            "description": "Filtra unidades por condominio",
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ListUnitsResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" }
+        }
+      },
+      "post": {
+        "tags": ["Units"],
+        "summary": "Cria unidade",
+        "operationId": "createUnit",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UnitInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnitResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" },
+          "422": { "$ref": "#/components/responses/ValidationError" }
+        }
+      }
+    },
+    "/units/{id}": {
+      "parameters": [
+        { "$ref": "#/components/parameters/IdPath" }
+      ],
+      "get": {
+        "tags": ["Units"],
+        "summary": "Busca unidade por ID",
+        "operationId": "findUnit",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnitResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" }
+        }
+      },
+      "put": {
+        "tags": ["Units"],
+        "summary": "Atualiza unidade",
+        "operationId": "updateUnit",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UnitInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UnitResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" },
+          "422": { "$ref": "#/components/responses/ValidationError" }
+        }
+      },
+      "delete": {
+        "tags": ["Units"],
+        "summary": "Remove unidade",
+        "operationId": "deleteUnit",
+        "responses": {
+          "200": {
+            "description": "Removido",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/StatusOnlyResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" }
+        }
+      }
+    },
+    "/people": {
+      "get": {
+        "tags": ["People"],
+        "summary": "Lista pessoas",
+        "operationId": "listPeople",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ListPeopleResponse" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["People"],
+        "summary": "Cria pessoa",
+        "operationId": "createPerson",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PersonInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PersonResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" },
+          "409": { "$ref": "#/components/responses/ConflictError" },
+          "422": { "$ref": "#/components/responses/ValidationError" }
+        }
+      }
+    },
+    "/people/{id}": {
+      "parameters": [
+        { "$ref": "#/components/parameters/IdPath" }
+      ],
+      "get": {
+        "tags": ["People"],
+        "summary": "Busca pessoa por ID",
+        "operationId": "findPerson",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PersonResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" }
+        }
+      }
+    },
+    "/suppliers": {
+      "get": {
+        "tags": ["Suppliers"],
+        "summary": "Lista fornecedores",
+        "operationId": "listSuppliers",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ListSuppliersResponse" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Suppliers"],
+        "summary": "Cria fornecedor",
+        "operationId": "createSupplier",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SupplierInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SupplierResponse" }
+              }
+            }
+          },
+          "409": { "$ref": "#/components/responses/ConflictError" },
+          "422": { "$ref": "#/components/responses/ValidationError" }
+        }
+      }
+    },
+    "/suppliers/{id}": {
+      "parameters": [
+        { "$ref": "#/components/parameters/IdPath" }
+      ],
+      "get": {
+        "tags": ["Suppliers"],
+        "summary": "Busca fornecedor por ID",
+        "operationId": "findSupplier",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SupplierResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" }
+        }
+      },
+      "put": {
+        "tags": ["Suppliers"],
+        "summary": "Atualiza fornecedor",
+        "operationId": "updateSupplier",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SupplierInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SupplierResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" },
+          "409": { "$ref": "#/components/responses/ConflictError" },
+          "422": { "$ref": "#/components/responses/ValidationError" }
+        }
+      },
+      "delete": {
+        "tags": ["Suppliers"],
+        "summary": "Remove fornecedor",
+        "operationId": "deleteSupplier",
+        "responses": {
+          "200": {
+            "description": "Removido",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/StatusOnlyResponse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequestError" },
+          "404": { "$ref": "#/components/responses/NotFoundError" }
+        }
+      }
+    },
+    "/suppliers/cnpj/{cnpj}": {
+      "parameters": [
+        {
+          "name": "cnpj",
+          "in": "path",
+          "required": true,
+          "description": "CNPJ (com ou sem mascara)",
+          "schema": { "type": "string" }
+        }
+      ],
+      "get": {
+        "tags": ["Suppliers"],
+        "summary": "Consulta preview de fornecedor por CNPJ",
+        "operationId": "lookupSupplierByCnpj",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SupplierPreviewResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" },
+          "422": { "$ref": "#/components/responses/ValidationError" },
+          "500": { "$ref": "#/components/responses/InternalError" }
+        }
+      }
+    },
+    "/budgets": {
+      "get": {
+        "tags": ["Budgets"],
+        "summary": "Lista orcamentos",
+        "operationId": "listBudgets",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ListBudgetsResponse" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Budgets"],
+        "summary": "Cria orcamento",
+        "operationId": "createBudget",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/BudgetInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BudgetResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" },
+          "422": { "$ref": "#/components/responses/ValidationError" }
+        }
+      }
+    },
+    "/budgets/{id}": {
+      "parameters": [
+        { "$ref": "#/components/parameters/IdPath" }
+      ],
+      "get": {
+        "tags": ["Budgets"],
+        "summary": "Busca orcamento por ID",
+        "operationId": "findBudget",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BudgetResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" }
+        }
+      },
+      "put": {
+        "tags": ["Budgets"],
+        "summary": "Atualiza orçamento",
+        "operationId": "updateBudget",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/BudgetInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BudgetResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" },
+          "422": { "$ref": "#/components/responses/ValidationError" }
+        }
+      },
+      "delete": {
+        "tags": ["Budgets"],
+        "summary": "Remove orçamento",
+        "operationId": "deleteBudget",
+        "responses": {
+          "200": {
+            "description": "Removido",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/StatusOnlyResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFoundError" }
+        }
+      }
+    },
+    "/audit-logs": {
+      "get": {
+        "tags": ["AuditLogs"],
+        "summary": "Lista logs de auditoria",
+        "operationId": "listAuditLogs",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Quantidade maxima de registros (padrao: 500, max: 5000)",
+            "schema": { "type": "integer", "minimum": 1, "maximum": 5000 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ListAuditLogsResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/audit-logs/export": {
+      "get": {
+        "tags": ["AuditLogs"],
+        "summary": "Exporta logs de auditoria em CSV (compativel com Excel)",
+        "operationId": "exportAuditLogsCsv",
+        "responses": {
+          "200": {
+            "description": "Arquivo CSV",
+            "content": {
+              "text/csv": {
+                "schema": { "type": "string", "format": "binary" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "IdPath": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "responses": {
+      "BadRequestError": {
+        "description": "Requisicao invalida",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "NotFoundError": {
+        "description": "Nao encontrado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Erro de validacao",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "ConflictError": {
+        "description": "Conflito de dados",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "InternalError": {
+        "description": "Erro interno",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "StatusOnlyResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 200 }
+        },
+        "required": ["statusCode"]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 422 },
+          "error": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "example": "VALIDATION_ERROR" },
+              "description": { "type": "string", "example": "Name is required" }
+            },
+            "required": ["type", "description"]
+          }
+        },
+        "required": ["statusCode", "error"]
+      },
+      "Condominium": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "name": { "type": "string", "example": "Residencial Porto Seguro" },
+          "zip_code": { "type": "string", "pattern": "^\\d{8}$", "example": "12345678" },
+          "url": { "type": "string", "format": "uri", "example": "https://www.portoseguro.com.br" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "name", "zip_code", "url"]
+      },
+      "CondominiumInput": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "zip_code": { "type": "string", "pattern": "^\\d{8}$" },
+          "url": { "type": "string", "format": "uri" }
+        },
+        "required": ["name", "zip_code", "url"]
+      },
+      "Unit": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "name": { "type": "string", "example": "101" },
+          "square_meters": { "type": "number", "nullable": true, "example": 80.5 },
+          "bedroom_count": { "type": "integer", "nullable": true, "example": 2 },
+          "condominium_id": { "type": "integer", "example": 1 },
+          "condominium": { "$ref": "#/components/schemas/Condominium" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "name", "condominium_id"]
+      },
+      "UnitInput": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "square_meters": { "type": "number", "minimum": 0.000001 },
+          "bedroom_count": { "type": "integer", "minimum": 0 },
+          "condominium_id": { "type": "integer", "minimum": 1 }
+        },
+        "required": ["name", "condominium_id"]
+      },
+      "Person": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "full_name": { "type": "string", "example": "Maria da Silva" },
+          "cpf": { "type": "string", "pattern": "^\\d{11}$", "example": "12345678909" },
+          "email": { "type": "string", "format": "email", "example": "maria@email.com" },
+          "birth_date": { "type": "string", "format": "date", "example": "1990-05-10" },
+          "created_by_condominium_id": { "type": "integer", "nullable": true, "example": 1 },
+          "created_by_condominium": { "$ref": "#/components/schemas/Condominium" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "full_name", "cpf", "email", "birth_date"]
+      },
+      "PersonInput": {
+        "type": "object",
+        "properties": {
+          "full_name": { "type": "string" },
+          "cpf": { "type": "string", "description": "Aceita com ou sem mascara" },
+          "email": { "type": "string", "format": "email" },
+          "birth_date": { "type": "string", "format": "date" },
+          "created_by_condominium_id": { "type": "integer", "minimum": 1 }
+        },
+        "required": ["full_name", "cpf", "email", "birth_date"]
+      },
+      "Supplier": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "legal_name": { "type": "string" },
+          "trade_name": { "type": "string" },
+          "cnpj": { "type": "string", "pattern": "^\\d{14}$" },
+          "email": { "type": "string", "format": "email" },
+          "zip_code": { "type": "string", "pattern": "^\\d{8}$" },
+          "address": { "type": "string" },
+          "category": {
+            "type": "string",
+            "enum": [
+              "Manutenção predial",
+              "Limpeza e conservação",
+              "Segurança e portaria",
+              "Elétrica e hidráulica",
+              "Obras e reformas",
+              "Administrativo e outros"
+            ]
+          },
+          "people": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Person" }
+          },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "legal_name", "trade_name", "cnpj", "email", "zip_code", "address", "category"]
+      },
+      "SupplierInput": {
+        "type": "object",
+        "properties": {
+          "legal_name": { "type": "string" },
+          "trade_name": { "type": "string" },
+          "cnpj": { "type": "string", "description": "Aceita com ou sem mascara" },
+          "email": { "type": "string", "format": "email" },
+          "zip_code": { "type": "string", "pattern": "^\\d{5}-?\\d{3}$" },
+          "address": { "type": "string" },
+          "category": {
+            "type": "string",
+            "enum": [
+              "Manutenção predial",
+              "Limpeza e conservação",
+              "Segurança e portaria",
+              "Elétrica e hidráulica",
+              "Obras e reformas",
+              "Administrativo e outros"
+            ]
+          },
+          "person_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "required": ["legal_name", "trade_name", "cnpj", "email", "zip_code", "address", "category", "person_ids"]
+      },
+      "SupplierPreview": {
+        "type": "object",
+        "properties": {
+          "provider": { "type": "string", "example": "brasilapi" },
+          "supplier": {
+            "type": "object",
+            "properties": {
+              "cnpj": { "type": "string", "pattern": "^\\d{14}$" },
+              "legal_name": { "type": "string" },
+              "trade_name": { "type": "string" },
+              "email": { "type": "string" },
+              "zip_code": { "type": "string", "pattern": "^\\d{8}$" },
+              "address": { "type": "string" }
+            },
+            "required": ["cnpj", "legal_name", "trade_name", "email", "zip_code", "address"]
+          }
+        },
+        "required": ["provider", "supplier"]
+      },
+      "Budget": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "supplier_id": { "type": "integer", "minimum": 1 },
+          "condominium_id": { "type": "integer", "minimum": 1 },
+          "title": { "type": "string" },
+          "service_description": { "type": "string" },
+          "value": { "type": "string", "example": "1500.00", "description": "Decimal serializado" },
+          "category": {
+            "type": "string",
+            "enum": [
+              "Manutenção preventiva",
+              "Manutenção corretiva",
+              "Obra ou reforma",
+              "Contratação recorrente",
+              "Compra pontual"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Rascunho",
+              "Enviado",
+              "Em análise",
+              "Aprovado",
+              "Reprovado",
+              "Cancelado"
+            ]
+          },
+          "supplier": { "$ref": "#/components/schemas/Supplier" },
+          "condominium": { "$ref": "#/components/schemas/Condominium" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "supplier_id", "condominium_id", "title", "service_description", "value", "category", "status"]
+      },
+      "BudgetInput": {
+        "type": "object",
+        "properties": {
+          "supplier_id": { "type": "integer", "minimum": 1 },
+          "condominium_id": { "type": "integer", "minimum": 1 },
+          "title": { "type": "string" },
+          "service_description": { "type": "string" },
+          "value": { "type": "number", "exclusiveMinimum": 0 },
+          "category": {
+            "type": "string",
+            "enum": [
+              "Manutenção preventiva",
+              "Manutenção corretiva",
+              "Obra ou reforma",
+              "Contratação recorrente",
+              "Compra pontual"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Rascunho",
+              "Enviado",
+              "Em análise",
+              "Aprovado",
+              "Reprovado",
+              "Cancelado"
+            ]
+          }
+        },
+        "required": ["supplier_id", "condominium_id", "title", "service_description", "value", "category", "status"]
+      },
+      "AuditLog": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 123 },
+          "created_at": { "type": "string", "format": "date-time" },
+          "method": { "type": "string", "example": "POST" },
+          "path": { "type": "string", "example": "/suppliers" },
+          "query_string": { "type": "string", "nullable": true, "example": "limit=500" },
+          "ip_address": { "type": "string", "nullable": true, "example": "203.0.113.10" },
+          "user_agent": { "type": "string", "nullable": true },
+          "request_body": { "type": "string", "nullable": true },
+          "response_status": { "type": "integer", "example": 201 },
+          "duration_ms": { "type": "integer", "example": 38 }
+        },
+        "required": ["id", "created_at", "method", "path", "response_status", "duration_ms"]
+      },
+      "ListAuditLogsResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 200 },
+          "data": {
+            "type": "object",
+            "properties": {
+              "audit_logs": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/AuditLog" }
+              }
+            },
+            "required": ["audit_logs"]
+          }
+        },
+        "required": ["statusCode", "data"]
+      },
+      "ListCondominiumsResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 200 },
+          "data": {
+            "type": "object",
+            "properties": {
+              "condominiums": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Condominium" }
+              }
+            },
+            "required": ["condominiums"]
+          }
+        },
+        "required": ["statusCode", "data"]
+      },
+      "CondominiumResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 200 },
+          "data": {
+            "type": "object",
+            "properties": {
+              "condominium": { "$ref": "#/components/schemas/Condominium" }
+            },
+            "required": ["condominium"]
+          }
+        },
+        "required": ["statusCode", "data"]
+      },
+      "ListUnitsResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 200 },
+          "data": {
+            "type": "object",
+            "properties": {
+              "units": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Unit" }
+              }
+            },
+            "required": ["units"]
+          }
+        },
+        "required": ["statusCode", "data"]
+      },
+      "UnitResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 200 },
+          "data": {
+            "type": "object",
+            "properties": {
+              "unit": { "$ref": "#/components/schemas/Unit" }
+            },
+            "required": ["unit"]
+          }
+        },
+        "required": ["statusCode", "data"]
+      },
+      "ListPeopleResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 200 },
+          "data": {
+            "type": "object",
+            "properties": {
+              "people": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Person" }
+              }
+            },
+            "required": ["people"]
+          }
+        },
+        "required": ["statusCode", "data"]
+      },
+      "PersonResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 200 },
+          "data": {
+            "type": "object",
+            "properties": {
+              "person": { "$ref": "#/components/schemas/Person" }
+            },
+            "required": ["person"]
+          }
+        },
+        "required": ["statusCode", "data"]
+      },
+      "ListSuppliersResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 200 },
+          "data": {
+            "type": "object",
+            "properties": {
+              "suppliers": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Supplier" }
+              }
+            },
+            "required": ["suppliers"]
+          }
+        },
+        "required": ["statusCode", "data"]
+      },
+      "SupplierResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 200 },
+          "data": {
+            "type": "object",
+            "properties": {
+              "supplier": { "$ref": "#/components/schemas/Supplier" }
+            },
+            "required": ["supplier"]
+          }
+        },
+        "required": ["statusCode", "data"]
+      },
+      "SupplierPreviewResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 200 },
+          "data": {
+            "type": "object",
+            "properties": {
+              "supplier_preview": { "$ref": "#/components/schemas/SupplierPreview" }
+            },
+            "required": ["supplier_preview"]
+          }
+        },
+        "required": ["statusCode", "data"]
+      },
+      "ListBudgetsResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 200 },
+          "data": {
+            "type": "object",
+            "properties": {
+              "budgets": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Budget" }
+              }
+            },
+            "required": ["budgets"]
+          }
+        },
+        "required": ["statusCode", "data"]
+      },
+      "BudgetResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": { "type": "integer", "example": 200 },
+          "data": {
+            "type": "object",
+            "properties": {
+              "budget": { "$ref": "#/components/schemas/Budget" }
+            },
+            "required": ["budget"]
+          }
+        },
+        "required": ["statusCode", "data"]
+      }
+    }
+  }
+}

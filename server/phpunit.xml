@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    bootstrap="tests/bootstrap.php"
+    cacheDirectory=".phpunit.cache"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+>
+    <testsuites>
+        <testsuite name="API Integration">
+            <directory>tests/Api</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
