@@ -3,8 +3,7 @@
 declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
-
-use Tests\Support\TestDatabaseManager;
+require __DIR__ . '/Support/TestDatabaseManager.php';
 
 /**
  * Ensures bootstrap.php required vars are present for test runs.
@@ -24,10 +23,10 @@ setTestEnv('DATABASE_USERNAME', 'root');
 setTestEnv('DATABASE_PASSWORD', 'gcondo');
 setTestEnv('CORS_ALLOWED_ORIGIN', 'http://localhost:5100');
 
-TestDatabaseManager::ensureDatabaseExists();
+\Tests\Support\TestDatabaseManager::ensureDatabaseExists();
 
 $app = require __DIR__ . '/../public/index.php';
 
 $GLOBALS['app'] = $app;
 
-TestDatabaseManager::resetSchema();
+\Tests\Support\TestDatabaseManager::resetSchema();
